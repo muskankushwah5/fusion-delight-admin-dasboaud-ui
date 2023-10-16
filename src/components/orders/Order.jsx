@@ -22,7 +22,6 @@ if (userData && userData.expirationTime) {
   } else {
     // Data is still valid, use it
     const user = userData.data;
-    console.log(user);
   }
 }
 

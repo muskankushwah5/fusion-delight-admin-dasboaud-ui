@@ -63,9 +63,14 @@ const RecentInfo = ({isHome}) => {
   const sendConfirmationEmail = async(item)=>{
     
     toast.loading("sending email confirmation");
-    if(item.orderStatus === "not_started" || !item.deliveryInfo.name ){
-      toast.error("Delivery Info and order satus need to be other than not started to send confirmation email");
+    if((item.orderStatus === "not_started" && item.address !== "undefined undefined undefined undefined") || !item.deliveryInfo.name ){
+      toast.error("Delivery Info and order satus need to be other than not started to send confirmation email for home delivery");
     }
+
+    if((item.orderStatus !== "prepared" && item.address === "undefined undefined undefined undefined") || !item.deliveryInfo.phone  ){
+      toast.error("Delivery Info and order satus need to be other than not started to send confirmation email for pickup delivery");
+    }
+
     else{
       toast.loading("sending email confirmation");
     
@@ -109,7 +114,7 @@ const RecentInfo = ({isHome}) => {
     <thead>
       <tr>
         <th >UserName</th>
-        <th >Address</th>
+        <th >Type</th>
         <th >Prize</th>
         <th >Item</th>
         
@@ -126,7 +131,7 @@ const RecentInfo = ({isHome}) => {
         {orderData?.map((item,index) => (
             <tr key={index} style={{borderBottomWidth:"1px",borderBottomColor:"lightgray",borderBottomStyle:"solid",fontSize:"16px",paddingRight:"2%",paddingLeft:"2%"}}>
             <td>{item.phone}</td>
-            <td>{item.address}</td>
+            <td>{item.address !== "undefined undefined undefined undefined" ? "Home Delivery" : "Pickup"}</td>
             <td>${item.totalPrize}</td>
             <td> <select>
             {item.foodDescription?.map((choice, choiceIndex) => (
@@ -149,12 +154,19 @@ const RecentInfo = ({isHome}) => {
             <td>{String(item.payementStatus) === String(1) ? <span style={{color:"green"}}>Success</span> : <span style={{color:"red"}}>Failed</span>} </td>
             <td >{ satusUpdate === true ? 
             <div>
+             { item.address === "undefined undefined undefined undefined" ?
+               <select onChange={(e)=>chnageStatusSelectHandler(e.target.value)}>
+                <option value={"not_started"}>Not started</option>
+                <option value={"preparing"}>Preparing</option>
+                <option value={"prepared"}>Prepared</option>
+              </select> :
               <select onChange={(e)=>chnageStatusSelectHandler(e.target.value)}>
                 <option value={"not_started"}>Not started</option>
                 <option value={"preparing"}>Preparing</option>
                 <option value={"delivering"}>Delivering</option>
                 <option value={"delivered"}>Delivered</option>
               </select>
+            }
               { !isHome && 
                 <div className='button-div'><button onClick={()=>statusUpdateHandler(item._id)}>Update</button>
               <button onClick={()=>setStatusUpdate(false)}>Cancel</button></div>}
