@@ -16,10 +16,10 @@ const Sidebar = () => {
     <div>
       <aside className={`sidebar ${isMobileSidebarOpen ? 'mobile-open' : ''}`}>
         <div className="top">
-          <div className="logo">
-            <img src="img/logo.jpeg" alt="Logo" />
+          <div className="logo" >
+            <img src="img/new_logo_image.png" alt="Logo"style={{borderRadius:"50%"}} />
             <h2>
-              Fusion<span className="danger">Delights</span>
+              Thai<span className="danger">Buddha</span>
             </h2>
           </div>
           <div className="close" id="close-btn" onClick={toggleMobileSidebar}>
